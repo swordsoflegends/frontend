@@ -48,11 +48,16 @@ export default {
       hours: "?",
       minutes: "?",
       seconds: "?",
-      releaseDate: moment("9/7/2021 18:00", "DD/MM/YYYY HH:mm"),
+      releaseDate: null,
     };
   },
   mounted() {
-    setInterval(this.update, 1000);
+    fetch(import.meta.env.VITE_API_URL + "/time/release")
+      .then((response) => response.json())
+      .then((json) => {
+        this.releaseDate = moment.unix(json.date);
+        setInterval(this.update, 1000);
+      });
   },
   methods: {
     update() {
